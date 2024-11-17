@@ -2,10 +2,7 @@ package com.inghub.project.domain.customer;
 
 import com.inghub.project.domain.loan.Loan;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -36,6 +33,13 @@ public class Customer {
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Loan> loans;
+
+    public Customer(String name, String surname, BigDecimal creditLimit, BigDecimal usedCreditLimit) {
+        this.name = name;
+        this.surname = surname;
+        this.creditLimit = creditLimit;
+        this.usedCreditLimit = usedCreditLimit;
+    }
 
     public void adjustCreditLimit(BigDecimal amount) {
         if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
