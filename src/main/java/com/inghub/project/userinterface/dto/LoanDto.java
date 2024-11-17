@@ -1,6 +1,6 @@
 package com.inghub.project.userinterface.dto;
 
-import com.inghub.project.domain.model.Loan;
+import com.inghub.project.domain.loan.Loan;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

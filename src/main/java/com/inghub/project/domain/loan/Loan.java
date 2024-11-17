@@ -1,5 +1,7 @@
-package com.inghub.project.domain.model;
+package com.inghub.project.domain.loan;
 
+import com.inghub.project.domain.customer.Customer;
+import com.inghub.project.domain.loaninstallment.LoanInstallment;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
