@@ -46,10 +46,11 @@ public class Loan {
     @OneToMany(mappedBy = "loan", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<LoanInstallment> installments;
 
-    public Loan(Customer customer, BigDecimal loanAmount, Integer numberOfInstallments) {
+    public Loan(Customer customer, BigDecimal loanAmount, Integer numberOfInstallments, BigDecimal interestRate) {
         this.customer = customer;
         this.loanAmount = loanAmount;
         this.numberOfInstallments = numberOfInstallments;
+        this.interestRate = interestRate;
         this.createDate =  LocalDate.now();
     }
 }

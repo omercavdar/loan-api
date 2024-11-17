@@ -26,5 +26,10 @@ public class LoanDto {
     public LoanDto(Loan loan) {
         this.id = loan.getId();
         this.customerId = loan.getCustomer() != null ? loan.getCustomer().getId() : null;
+        this.loanAmount = loan.getLoanAmount();
+        this.numberOfInstallments = loan.getNumberOfInstallments();
+        this.interestRate = loan.getInterestRate();
+        this.createDate = loan.getCreateDate();
+        this.isPaid = loan.getIsPaid();
     }
 }

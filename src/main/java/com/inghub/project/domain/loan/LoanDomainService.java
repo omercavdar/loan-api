@@ -25,7 +25,7 @@ public class LoanDomainService {
 
         BigDecimal totalLoanAmount = calculateTotalLoanAmount(amount, interestRate);
 
-        Loan loan = new Loan(customer, totalLoanAmount, numberOfInstallments);
+        Loan loan = new Loan(customer, totalLoanAmount, numberOfInstallments, interestRate);
 
         List<LoanInstallment> installments = createInstallments(loan, totalLoanAmount, numberOfInstallments);
 
