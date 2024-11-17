@@ -1,5 +1,6 @@
 package com.inghub.project.userinterface.controller;
 
+import com.inghub.project.application.loan.LoanApplicationService;
 import com.inghub.project.domain.exception.InvalidLoanParametersException;
 import com.inghub.project.userinterface.dto.CreateLoanRequest;
 import com.inghub.project.userinterface.dto.LoanDto;
