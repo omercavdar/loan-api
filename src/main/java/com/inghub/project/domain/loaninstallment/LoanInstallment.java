@@ -46,4 +46,13 @@ public class LoanInstallment {
         this.dueDate = dueDate;
         this.paymentDate = null;
     }
+    public void pay(BigDecimal payment, LocalDate paymentDate) {
+        if (payment == null || payment.compareTo(this.amount) != 0) {
+            throw new IllegalArgumentException("Installment must be paid in full");
+        }
+        this.paidAmount = payment;
+        this.paymentDate = paymentDate;
+        this.isPaid = true;
+    }
+
 }

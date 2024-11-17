@@ -53,4 +53,8 @@ public class Loan {
         this.interestRate = interestRate;
         this.createDate =  LocalDate.now();
     }
+
+    public void markAsPaid() {
+        this.isPaid = true;
+    }
 }

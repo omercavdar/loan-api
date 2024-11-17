@@ -3,14 +3,15 @@ package com.inghub.project.application.loan;
 import com.inghub.project.domain.customer.Customer;
 import com.inghub.project.domain.customer.CustomerRepository;
 import com.inghub.project.domain.exception.CustomerNotFoundException;
+import com.inghub.project.domain.exception.LoanNotFoundException;
 import com.inghub.project.domain.loan.Loan;
 import com.inghub.project.domain.loan.LoanDomainService;
 import com.inghub.project.domain.loan.LoanRepository;
-import com.inghub.project.userinterface.dto.CreateLoanRequest;
-import com.inghub.project.userinterface.dto.LoanDto;
+import com.inghub.project.userinterface.dto.*;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -63,5 +64,32 @@ public class LoanApplicationService {
         return loans.stream()
                 .map(LoanDto::new)
                 .collect(Collectors.toList());
+    }
+
+    public List<LoanInstallmentDto> getInstallmentsForLoan(Long loanId) {
+        Loan loan = loanRepository.findById(loanId)
+                .orElseThrow(() -> new LoanNotFoundException("Loan with ID " + loanId + " not found"));
+
+        return loan.getInstallments()
+                .stream()
+                .map(LoanInstallmentDto::new)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public PaymentResultDto payLoan(Long loanId, BigDecimal amount) {
+        Loan loan = loanRepository.findById(loanId)
+                .orElseThrow(() -> new LoanNotFoundException("Loan not found"));
+
+        PaymentResult result = loanDomainService.processPayment(loan, amount);
+
+        loanRepository.save(loan);
+        customerRepository.save(loan.getCustomer());
+
+        return new PaymentResultDto(
+                result.getInstallmentsPaid(),
+                result.getTotalAmountPaid(),
+                result.isLoanFullyPaid()
+        );
     }
 }

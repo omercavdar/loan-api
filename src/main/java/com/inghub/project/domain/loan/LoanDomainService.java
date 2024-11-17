@@ -2,6 +2,7 @@ package com.inghub.project.domain.loan;
 
 import com.inghub.project.domain.customer.Customer;
 import com.inghub.project.domain.loaninstallment.LoanInstallment;
+import com.inghub.project.userinterface.dto.PaymentResult;
 import com.inghub.project.utils.DateUtils;
 import org.springframework.stereotype.Service;
 
@@ -60,5 +61,43 @@ public class LoanDomainService {
         }
 
         return installments;
+    }
+
+    public PaymentResult processPayment(Loan loan, BigDecimal amount) {
+        if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("Payment amount must be greater than zero");
+        }
+
+        BigDecimal remainingAmount = amount;
+        int installmentsPaid = 0;
+        BigDecimal totalAmountPaid = BigDecimal.ZERO;
+
+        LocalDate maxPayableDate = LocalDate.now().plusMonths(3);
+
+        for (LoanInstallment installment : loan.getInstallments()) {
+            if (installment.getIsPaid()) {
+                continue;
+            }
+
+            if (installment.getDueDate().isAfter(maxPayableDate)) {
+                break;
+            }
+
+            if (remainingAmount.compareTo(installment.getAmount()) >= 0) {
+                installment.pay(installment.getAmount(), LocalDate.now());
+                remainingAmount = remainingAmount.subtract(installment.getAmount());
+                totalAmountPaid = totalAmountPaid.add(installment.getAmount());
+                installmentsPaid++;
+            } else {
+                break;
+            }
+        }
+
+        boolean isLoanFullyPaid = loan.getInstallments().stream().allMatch(LoanInstallment::getIsPaid);
+        if (isLoanFullyPaid) {
+            loan.markAsPaid();
+        }
+
+        return new PaymentResult(installmentsPaid, totalAmountPaid, isLoanFullyPaid);
     }
 }

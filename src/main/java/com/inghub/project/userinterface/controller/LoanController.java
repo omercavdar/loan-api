@@ -2,8 +2,7 @@ package com.inghub.project.userinterface.controller;
 
 import com.inghub.project.application.loan.LoanApplicationService;
 import com.inghub.project.domain.exception.InvalidLoanParametersException;
-import com.inghub.project.userinterface.dto.CreateLoanRequest;
-import com.inghub.project.userinterface.dto.LoanDto;
+import com.inghub.project.userinterface.dto.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,5 +36,19 @@ public class LoanController {
     ) {
         List<LoanDto> loans = loanApplicationService.listLoans(customerId, isPaid);
         return ResponseEntity.ok(loans);
+    }
+
+    @GetMapping("/{loanId}/installments")
+    public ResponseEntity<List<LoanInstallmentDto>> getInstallmentsForLoan(@PathVariable Long loanId) {
+        List<LoanInstallmentDto> installments = loanApplicationService.getInstallmentsForLoan(loanId);
+        return ResponseEntity.ok(installments);
+    }
+
+    @PostMapping("/{loanId}/pay")
+    public ResponseEntity<PaymentResultDto> payLoan(
+            @PathVariable Long loanId,
+            @RequestBody PayLoanRequest request) {
+        PaymentResultDto result = loanApplicationService.payLoan(loanId, request.getAmount());
+        return ResponseEntity.ok(result);
     }
 }
