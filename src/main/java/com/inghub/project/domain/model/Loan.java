@@ -1,4 +1,4 @@
-package com.inghub.project.domain;
+package com.inghub.project.domain.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
